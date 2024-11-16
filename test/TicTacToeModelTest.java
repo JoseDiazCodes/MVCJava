@@ -1,12 +1,15 @@
 import org.junit.Test;
-import tictactoe.Player;
-import tictactoe.TicTacToe;
-import tictactoe.TicTacToeModel;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import tictactoe.Player;
+import tictactoe.TicTacToe;
+import tictactoe.TicTacToeModel;
+
 
 /**
  * Test cases for the tic-tac-toe model. This test class verifies that the game state is
