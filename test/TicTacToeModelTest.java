@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-
 import tictactoe.Player;
 import tictactoe.TicTacToe;
 import tictactoe.TicTacToeModel;
