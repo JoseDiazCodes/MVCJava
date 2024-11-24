@@ -48,13 +48,13 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
     try {
       while (!model.isGameOver()) {
-        // Initial board state + prompt
-        out.append(model.toString()).append("\n");
-        out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
-
         if (!scan.hasNext()) {
           throw new IllegalStateException("No more input available");
         }
+
+        // Display game state
+        out.append(model.toString()).append("\n");
+        out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
 
         String input = scan.next();
         if (input.equalsIgnoreCase("q")) {
@@ -68,6 +68,7 @@ public class TicTacToeConsoleController implements TicTacToeController {
           if (!scan.hasNext()) {
             throw new IllegalStateException("No more input available");
           }
+
           String colInput = scan.next();
           if (colInput.equalsIgnoreCase("q")) {
             out.append("Game quit! Ending game state:\n")
@@ -87,9 +88,9 @@ public class TicTacToeConsoleController implements TicTacToeController {
           }
         } catch (NumberFormatException e) {
           out.append("Please enter numbers for position.\n");
-          continue; // Skip reprinting board, just continue to next iteration
-        } catch (NoSuchElementException e) {
-          throw new IllegalStateException("No more input available");
+          // Don't redisplay the board for invalid input
+          out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
+          continue;
         }
       }
 
