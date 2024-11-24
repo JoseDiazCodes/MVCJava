@@ -61,8 +61,14 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
         String input = scan.next();
         if (input.equalsIgnoreCase("q")) {
-          out.append("Game quit! Ending game state:\n")
-                  .append(model.toString()).append("\n");
+          // Add newline only for moves already made
+          if (!firstOutput) {
+            out.append("Game quit! Ending game state:\n")
+                    .append(model.toString()).append("\n");
+          } else {
+            out.append("Game quit! Ending game state:\n")
+                    .append(model.toString());
+          }
           return;
         }
 
@@ -74,8 +80,14 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
           String colInput = scan.next();
           if (colInput.equalsIgnoreCase("q")) {
-            out.append("Game quit! Ending game state:\n")
-                    .append(model.toString()).append("\n");
+            // Add newline only for moves already made
+            if (!firstOutput) {
+              out.append("Game quit! Ending game state:\n")
+                      .append(model.toString()).append("\n");
+            } else {
+              out.append("Game quit! Ending game state:\n")
+                      .append(model.toString());
+            }
             return;
           }
 
