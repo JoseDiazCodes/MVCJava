@@ -1,21 +1,27 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.StringReader;
+import java.util.Arrays;
+
+import org.junit.Test;
+
 import tictactoe.FailingAppendable;
 import tictactoe.TicTacToe;
 import tictactoe.TicTacToeConsoleController;
 import tictactoe.TicTacToeController;
 import tictactoe.TicTacToeModel;
-import java.io.StringReader;
-import java.util.Arrays;
-import org.junit.Test;
 
 /**
- * Test cases for the tic-tac-toe controller, using mocks for readable and appendable.
+ * Tests for the TicTacToe controller implementation. Verifies game flow, input handling,
+ * error conditions, and proper game completion scenarios using mock I/O objects.
  */
+
 public class TicTacToeControllerTest {
 
-
+  /**
+   * Tests that a complete game can be played where one player (X) wins.
+   */
   @Test
   public void testGameWithWinner() {
     TicTacToe m = new TicTacToeModel();
@@ -27,7 +33,9 @@ public class TicTacToeControllerTest {
     assertTrue(gameLog.toString().contains("Game is over! X wins."));
   }
 
-
+  /**
+   * Tests that the game can be quit by entering 'q' when prompted for row input.
+   */
   @Test
   public void testQuitInsteadOfRow() {
     TicTacToe m = new TicTacToeModel();
@@ -38,6 +46,9 @@ public class TicTacToeControllerTest {
     assertTrue(gameLog.toString().contains("Game quit! Ending game state:"));
   }
 
+  /**
+   * Tests that the game can be quit by entering 'q' when prompted for column input.
+   */
   @Test
   public void testQuitInsteadOfColumn() {
     TicTacToe m = new TicTacToeModel();
@@ -48,6 +59,9 @@ public class TicTacToeControllerTest {
     assertTrue(gameLog.toString().contains("Game quit! Ending game state:"));
   }
 
+  /**
+   * Tests that non-numeric input for row coordinate is properly handled with error message.
+   */
   @Test
   public void testInvalidRowInput() {
     TicTacToe m = new TicTacToeModel();
@@ -58,6 +72,9 @@ public class TicTacToeControllerTest {
     assertTrue(gameLog.toString().contains("Please enter numbers for position."));
   }
 
+  /**
+   * Tests that non-numeric input for column coordinate is properly handled with error message.
+   */
   @Test
   public void testInvalidColumnInput() {
     TicTacToe m = new TicTacToeModel();
@@ -67,6 +84,10 @@ public class TicTacToeControllerTest {
     c.playGame(m);
     assertTrue(gameLog.toString().contains("Please enter numbers for position."));
   }
+
+  /**
+   * Tests that moves outside the game board boundaries are rejected with error message.
+   */
 
   @Test
   public void testOutOfBoundsMove() {
@@ -78,6 +99,9 @@ public class TicTacToeControllerTest {
     assertTrue(gameLog.toString().contains("Invalid move. Try again."));
   }
 
+  /**
+   * Tests that attempts to move in an already occupied cell are rejected with error message.
+   */
   @Test
   public void testOccupiedCell() {
     TicTacToe m = new TicTacToeModel();
@@ -89,6 +113,9 @@ public class TicTacToeControllerTest {
     assertTrue(gameLog.toString().contains("Invalid move. Try again."));
   }
 
+  /**
+   * Tests handling of multiple invalid moves in sequence (out of bounds, occupied, non-numeric).
+   */
   @Test
   public void testMultipleInvalidMoves() {
     TicTacToe m = new TicTacToeModel();
@@ -102,6 +129,10 @@ public class TicTacToeControllerTest {
     assertTrue(output.contains("Please enter numbers for position."));
   }
 
+
+  /**
+   * Tests a game with mixture of valid and invalid moves to ensure proper game flow.
+   */
   @Test
   public void testValidAndInvalidMoves() {
     TicTacToe m = new TicTacToeModel();
@@ -116,6 +147,9 @@ public class TicTacToeControllerTest {
     assertTrue(output.contains("Invalid move. Try again."));
   }
 
+  /**
+   * Tests that proper exception is thrown when input ends unexpectedly during game.
+   */
   @Test(expected = IllegalStateException.class)
   public void testAbruptInputEnd() {
     TicTacToe m = new TicTacToeModel();
@@ -126,6 +160,9 @@ public class TicTacToeControllerTest {
     c.playGame(m);
   }
 
+  /**
+   * Tests that a single valid move can be made and verified, followed by game quit.
+   */
   @Test
   public void testSingleValidMove() {
     TicTacToe m = new TicTacToeModel();
@@ -152,6 +189,9 @@ public class TicTacToeControllerTest {
         + "   |   |  \n", gameLog.toString());
   }
 
+  /**
+   * Tests handling of invalid input for row coordinate with specific error formatting.
+   */
   @Test
   public void testBogusInputAsRow() {
     TicTacToe m = new TicTacToeModel();
@@ -174,6 +214,9 @@ public class TicTacToeControllerTest {
             + "   |   |  ", lastMsg);
   }
 
+  /**
+   * Tests that a complete game can reach a tie state with proper output.
+   */
   @Test
   public void testTieGame() {
     TicTacToe m = new TicTacToeModel();
@@ -187,6 +230,9 @@ public class TicTacToeControllerTest {
     assertEquals("Game is over! Tie game.", lines[lines.length - 1]);
   }
 
+  /**
+   * Tests that IOException from Appendable is properly converted to IllegalStateException.
+   */
   @Test(expected = IllegalStateException.class)
   public void testFailingAppendable() {
     TicTacToe m = new TicTacToeModel();

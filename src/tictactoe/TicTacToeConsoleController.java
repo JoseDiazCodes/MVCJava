@@ -48,52 +48,52 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
     try {
       while (!model.isGameOver()) {
+        // Initial board state + prompt
         out.append(model.toString()).append("\n");
         out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
 
-        // Check if we have input before trying to read
         if (!scan.hasNext()) {
           throw new IllegalStateException("No more input available");
         }
 
+        String input = scan.next();
+        if (input.equalsIgnoreCase("q")) {
+          out.append("Game quit! Ending game state:\n")
+                  .append(model.toString()).append("\n");
+          return;
+        }
+
         try {
-          String input = scan.next();
-          if (input.equalsIgnoreCase("q")) {
+          int row = Integer.parseInt(input);
+          if (!scan.hasNext()) {
+            throw new IllegalStateException("No more input available");
+          }
+          String colInput = scan.next();
+          if (colInput.equalsIgnoreCase("q")) {
             out.append("Game quit! Ending game state:\n")
                     .append(model.toString()).append("\n");
             return;
           }
 
           try {
-            int row = Integer.parseInt(input);
-            if (!scan.hasNext()) {
-              throw new IllegalStateException("No more input available");
-            }
-            String colInput = scan.next();
-            if (colInput.equalsIgnoreCase("q")) {
-              out.append("Game quit! Ending game state:\n")
-                      .append(model.toString()).append("\n");
-              return;
-            }
+            int col = Integer.parseInt(colInput);
             try {
-              int col = Integer.parseInt(colInput);
-              try {
-                model.move(row - 1, col - 1);
-              } catch (IllegalArgumentException e) {
-                out.append("Invalid move. Try again.\n");
-              }
-            } catch (NumberFormatException e) {
-              out.append("Please enter numbers for position.\n");
+              model.move(row - 1, col - 1);
+            } catch (IllegalArgumentException e) {
+              out.append("Invalid move. Try again.\n");
             }
           } catch (NumberFormatException e) {
             out.append("Please enter numbers for position.\n");
-            continue;
           }
+        } catch (NumberFormatException e) {
+          out.append("Please enter numbers for position.\n");
+          continue; // Skip reprinting board, just continue to next iteration
         } catch (NoSuchElementException e) {
           throw new IllegalStateException("No more input available");
         }
       }
 
+      // Game over states
       out.append(model.toString()).append("\n");
       out.append("Game is over! ");
       Player winner = model.getWinner();
