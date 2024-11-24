@@ -45,6 +45,7 @@ public class TicTacToeConsoleController implements TicTacToeController {
         }
         out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
 
+        // Check if there's input available
         if (!scan.hasNext()) {
           throw new IllegalStateException("No more input available");
         }
@@ -57,8 +58,9 @@ public class TicTacToeConsoleController implements TicTacToeController {
           return;
         }
 
+        int row, col;
         try {
-          int row = Integer.parseInt(input);
+          row = Integer.parseInt(input);
           if (!scan.hasNext()) {
             throw new IllegalStateException("No more input available");
           }
@@ -71,26 +73,21 @@ public class TicTacToeConsoleController implements TicTacToeController {
             return;
           }
 
-          try {
-            int col = Integer.parseInt(colInput);
+          col = Integer.parseInt(colInput);
 
-            // Add input validation for row and column bounds
-            if (row <= 0 || row > BOARD_SIZE || col <= 0 || col > BOARD_SIZE) {
-              out.append("Invalid move. Position out of bounds.\n");
-              continue;
-            }
-
-            try {
-              model.move(row - 1, col - 1);
-              out.append(model.toString()).append("\n");
-            } catch (IllegalArgumentException e) {
-              out.append("Invalid move. Try again.\n");
-            }
-          } catch (NumberFormatException e) {
-            out.append("Please enter numbers for position.\n");
+          // Validate input bounds before making move
+          if (row <= 0 || row > BOARD_SIZE || col <= 0 || col > BOARD_SIZE) {
+            out.append("Invalid move. Position out of bounds.\n");
+            continue;
           }
+
+          // Try to make the move
+          model.move(row - 1, col - 1);
+          out.append(model.toString()).append("\n");
         } catch (NumberFormatException e) {
           out.append("Please enter numbers for position.\n");
+        } catch (IllegalArgumentException e) {
+          out.append("Invalid move. Try again.\n");
         }
       }
 
