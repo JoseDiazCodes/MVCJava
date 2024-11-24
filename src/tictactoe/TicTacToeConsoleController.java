@@ -47,22 +47,20 @@ public class TicTacToeConsoleController implements TicTacToeController {
     }
 
     try {
-      boolean firstOutput = true;
-      while (!model.isGameOver()) {
-        if (firstOutput) {
-          out.append(model.toString()).append("\n");
-          firstOutput = false;
-        }
-        out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
+      // Initial display - always show board and prompt (4 lines)
+      out.append(model.toString()).append("\n");
+      out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
 
+      while (!model.isGameOver()) {
         if (!scan.hasNext()) {
           throw new IllegalStateException("No more input available");
         }
 
         String input = scan.next();
         if (input.equalsIgnoreCase("q")) {
-          out.append("Game quit! Ending game state:\n")
-                  .append(model.toString()).append("\n");
+          // Quit sequence - 7 lines total (message + board)
+          out.append("Game quit! Ending game state:\n");
+          out.append(model.toString()); // No trailing \n
           return;
         }
 
@@ -74,8 +72,8 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
           String colInput = scan.next();
           if (colInput.equalsIgnoreCase("q")) {
-            out.append("Game quit! Ending game state:\n")
-                    .append(model.toString()).append("\n");
+            out.append("Game quit! Ending game state:\n");
+            out.append(model.toString()); // No trailing \n
             return;
           }
 
@@ -84,20 +82,24 @@ public class TicTacToeConsoleController implements TicTacToeController {
             try {
               model.move(row - 1, col - 1);
               out.append(model.toString()).append("\n");
+              out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
             } catch (IllegalArgumentException e) {
               out.append("Invalid move. Try again.\n");
+              out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
             }
           } catch (NumberFormatException e) {
             out.append("Please enter numbers for position.\n");
+            out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
           }
         } catch (NumberFormatException e) {
+          // Error sequence - 2 lines (error + prompt)
           out.append("Please enter numbers for position.\n");
+          out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
         }
       }
 
-      if (!model.isGameOver()) {
-        out.append(model.toString()).append("\n");
-      }
+      // Game over sequence
+      out.append(model.toString()).append("\n");
       out.append("Game is over! ");
       Player winner = model.getWinner();
       if (winner != null) {
