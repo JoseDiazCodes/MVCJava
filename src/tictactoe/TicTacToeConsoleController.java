@@ -58,7 +58,8 @@ public class TicTacToeConsoleController implements TicTacToeController {
           return;
         }
 
-        int row, col;
+        int row;
+        int col;
         try {
           row = Integer.parseInt(input);
           if (!scan.hasNext()) {
