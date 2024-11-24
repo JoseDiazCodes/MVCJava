@@ -37,12 +37,8 @@ public class TicTacToeConsoleController implements TicTacToeController {
     }
 
     try {
-      boolean firstOutput = true;
+      out.append(model.toString()).append("\n");
       while (!model.isGameOver()) {
-        if (firstOutput) {
-          out.append(model.toString()).append("\n");
-          firstOutput = false;
-        }
         out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
 
         if (!scan.hasNext()) {
@@ -52,8 +48,7 @@ public class TicTacToeConsoleController implements TicTacToeController {
         String input = scan.next();
         if (input.equalsIgnoreCase("q")) {
           out.append("Game quit! Ending game state:\n")
-                  .append(model.toString())
-                  .append(firstOutput ? "" : "\n");
+                  .append(model.toString()); // Remove extra newline here
           return;
         }
 
@@ -66,15 +61,13 @@ public class TicTacToeConsoleController implements TicTacToeController {
           String colInput = scan.next();
           if (colInput.equalsIgnoreCase("q")) {
             out.append("Game quit! Ending game state:\n")
-                    .append(model.toString())
-                    .append(firstOutput ? "" : "\n");
+                    .append(model.toString()); // Remove extra newline here
             return;
           }
 
           try {
             int col = Integer.parseInt(colInput);
             try {
-              // Remove our custom validation and let model handle invalid moves
               model.move(row - 1, col - 1);
               out.append(model.toString()).append("\n");
             } catch (IllegalArgumentException e) {
@@ -88,7 +81,6 @@ public class TicTacToeConsoleController implements TicTacToeController {
         }
       }
 
-      // Game over handling
       out.append("Game is over! ");
       Player winner = model.getWinner();
       if (winner != null) {
