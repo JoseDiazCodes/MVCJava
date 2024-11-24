@@ -200,10 +200,11 @@ public class TicTacToeControllerTest {
     TicTacToeController c = new TicTacToeConsoleController(input, gameLog);
     c.playGame(m);
 
-    // split the output into an array of lines
-    String[] lines = gameLog.toString().split("\n");
+    System.out.println("=== Actual Output ===");
+    System.out.println(gameLog.toString());
+    System.out.println("=== Line Count: " + gameLog.toString().split("\n").length + " ===");
 
-    // check that the last 6 lines are correct
+    String[] lines = gameLog.toString().split("\n");
     String lastMsg = String.join("\n",
             Arrays.copyOfRange(lines, lines.length - 6, lines.length));
     assertEquals("Game quit! Ending game state:\n"
