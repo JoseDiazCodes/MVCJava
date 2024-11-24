@@ -9,20 +9,10 @@ import java.util.Scanner;
  * text commands. Supports move entry and game quitting.
  */
 public class TicTacToeConsoleController implements TicTacToeController {
-  /**
-   * The source of input for the game, providing player moves and commands.
-   */
   private final Readable in;
-
-  /**
-   * The destination for output, displaying game state and messages to players.
-   */
   private final Appendable out;
-
-  /**
-   * Scanner used to parse input from the Readable source into game moves.
-   */
   private final Scanner scan;
+  private static final int BOARD_SIZE = 3; // Standard TicTacToe board size
 
   /**
    * Creates a controller that uses the specified sources for input and output.
@@ -61,14 +51,9 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
         String input = scan.next();
         if (input.equalsIgnoreCase("q")) {
-          // Add newline only for moves already made
-          if (!firstOutput) {
-            out.append("Game quit! Ending game state:\n")
-                    .append(model.toString()).append("\n");
-          } else {
-            out.append("Game quit! Ending game state:\n")
-                    .append(model.toString());
-          }
+          out.append("Game quit! Ending game state:\n")
+                  .append(model.toString())
+                  .append(firstOutput ? "" : "\n");
           return;
         }
 
@@ -80,19 +65,21 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
           String colInput = scan.next();
           if (colInput.equalsIgnoreCase("q")) {
-            // Add newline only for moves already made
-            if (!firstOutput) {
-              out.append("Game quit! Ending game state:\n")
-                      .append(model.toString()).append("\n");
-            } else {
-              out.append("Game quit! Ending game state:\n")
-                      .append(model.toString());
-            }
+            out.append("Game quit! Ending game state:\n")
+                    .append(model.toString())
+                    .append(firstOutput ? "" : "\n");
             return;
           }
 
           try {
             int col = Integer.parseInt(colInput);
+
+            // Add input validation for row and column bounds
+            if (row <= 0 || row > BOARD_SIZE || col <= 0 || col > BOARD_SIZE) {
+              out.append("Invalid move. Position out of bounds.\n");
+              continue;
+            }
+
             try {
               model.move(row - 1, col - 1);
               out.append(model.toString()).append("\n");
@@ -107,9 +94,7 @@ public class TicTacToeConsoleController implements TicTacToeController {
         }
       }
 
-      if (!model.isGameOver()) {
-        out.append(model.toString()).append("\n");
-      }
+      // Game over handling
       out.append("Game is over! ");
       Player winner = model.getWinner();
       if (winner != null) {
