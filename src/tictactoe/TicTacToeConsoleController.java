@@ -37,8 +37,12 @@ public class TicTacToeConsoleController implements TicTacToeController {
     }
 
     try {
-      out.append(model.toString()).append("\n");
+      boolean firstOutput = true;
       while (!model.isGameOver()) {
+        if (firstOutput) {
+          out.append(model.toString()).append("\n");
+          firstOutput = false;
+        }
         out.append("Enter a move for ").append(model.getTurn().toString()).append(":\n");
 
         if (!scan.hasNext()) {
@@ -48,7 +52,8 @@ public class TicTacToeConsoleController implements TicTacToeController {
         String input = scan.next();
         if (input.equalsIgnoreCase("q")) {
           out.append("Game quit! Ending game state:\n")
-                  .append(model.toString()); // Remove extra newline here
+                  .append(model.toString())
+                  .append(firstOutput ? "" : "\n");
           return;
         }
 
@@ -61,12 +66,20 @@ public class TicTacToeConsoleController implements TicTacToeController {
           String colInput = scan.next();
           if (colInput.equalsIgnoreCase("q")) {
             out.append("Game quit! Ending game state:\n")
-                    .append(model.toString()); // Remove extra newline here
+                    .append(model.toString())
+                    .append(firstOutput ? "" : "\n");
             return;
           }
 
           try {
             int col = Integer.parseInt(colInput);
+
+            // Add input validation for row and column bounds
+            if (row <= 0 || row > BOARD_SIZE || col <= 0 || col > BOARD_SIZE) {
+              out.append("Invalid move. Position out of bounds.\n");
+              continue;
+            }
+
             try {
               model.move(row - 1, col - 1);
               out.append(model.toString()).append("\n");
@@ -81,6 +94,7 @@ public class TicTacToeConsoleController implements TicTacToeController {
         }
       }
 
+      // Game over handling
       out.append("Game is over! ");
       Player winner = model.getWinner();
       if (winner != null) {
