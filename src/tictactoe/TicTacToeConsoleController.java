@@ -73,14 +73,8 @@ public class TicTacToeConsoleController implements TicTacToeController {
 
           try {
             int col = Integer.parseInt(colInput);
-
-            // Add input validation for row and column bounds
-            if (row <= 0 || row > BOARD_SIZE || col <= 0 || col > BOARD_SIZE) {
-              out.append("Invalid move. Position out of bounds.\n");
-              continue;
-            }
-
             try {
+              // Remove our custom validation and let model handle invalid moves
               model.move(row - 1, col - 1);
               out.append(model.toString()).append("\n");
             } catch (IllegalArgumentException e) {
